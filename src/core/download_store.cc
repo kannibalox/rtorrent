@@ -113,14 +113,6 @@ DownloadStore::write_bencode(const std::string& filename, const torrent::Object&
 
   output.close();
 
-  // Test the new file, to ensure it is a valid bencode string.
-  output.open(filename.c_str(), std::ios::in);
-  output >> tmp;
-
-  if (!output.good())
-    goto download_store_save_error;
-
-  output.close();
   return true;
 
 download_store_save_error:
