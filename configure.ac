@@ -11,6 +11,7 @@ AC_DEFINE([API_VERSION], [10], [api version])
 AC_PROG_RANLIB
 AC_PROG_CXX
 AC_SYS_LARGEFILE
+AC_PROG_LIBTOOL
 
 AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
 
@@ -50,6 +51,10 @@ fi
 PKG_CHECK_MODULES([LIBCURL], [libcurl],, [LIBCURL_CHECK_CONFIG])
 PKG_CHECK_MODULES([CPPUNIT], [cppunit],, [no_cppunit="yes"])
 PKG_CHECK_MODULES([DEPENDENCIES], [libtorrent >= 0.14.0])
+
+AC_LANG_PUSH(C++)
+TORRENT_WITH_XMLRPC_C
+AC_LANG_POP(C++)
 
 AC_DEFINE(HAVE_CONFIG_H, 1, true if config.h was included)
 AC_DEFINE(USER_AGENT, [std::string(PACKAGE "/" VERSION "/") + torrent::version()], Http user agent)

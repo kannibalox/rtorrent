@@ -1,5 +1,7 @@
 #include <string>
 
+#include <torrent/exceptions.h>
+
 namespace utils {
 constexpr static char padCharacter = '=';
 static std::string

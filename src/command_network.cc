@@ -123,12 +123,22 @@ xmlrpc_find_peer(core::Download* download, const torrent::HashString& hash) {
 
 void
 initialize_xmlrpc() {
+  rpc::xmlrpc.initialize();
   rpc::xmlrpc.slot_find_download() = std::bind(&core::DownloadList::find_hex_ptr, control->core()->download_list(), std::placeholders::_1);
   rpc::xmlrpc.slot_find_file() = std::bind(&xmlrpc_find_file, std::placeholders::_1, std::placeholders::_2);
   rpc::xmlrpc.slot_find_tracker() = std::bind(&xmlrpc_find_tracker, std::placeholders::_1, std::placeholders::_2);
   rpc::xmlrpc.slot_find_peer() = std::bind(&xmlrpc_find_peer, std::placeholders::_1, std::placeholders::_2);
 
-  lt_log_print(torrent::LOG_RPC_EVENTS, "XMLRPC initialized.");
+  unsigned int count = 0;
+
+  for (rpc::CommandMap::const_iterator itr = rpc::commands.begin(), last = rpc::commands.end(); itr != last; itr++, count++) {
+    if (!(itr->second.m_flags & rpc::CommandMap::flag_public_xmlrpc))
+      continue;
+
+    rpc::xmlrpc.insert_command(itr->first, itr->second.m_parm, itr->second.m_doc);
+  }
+
+  lt_log_print(torrent::LOG_RPC_EVENTS, "XMLRPC initialized with %u functions.", count);
 }
 
 torrent::Object
@@ -136,7 +146,8 @@ apply_scgi(const std::string& arg, int type) {
   if (worker_thread->scgi() != NULL)
     throw torrent::input_error("SCGI already enabled.");
 
-  initialize_xmlrpc();
+  if (!rpc::xmlrpc.is_valid())
+    initialize_xmlrpc();
 
   rpc::SCgi* scgi = new rpc::SCgi;
 
@@ -202,8 +213,20 @@ apply_scgi(const std::string& arg, int type) {
 }
 
 torrent::Object
-apply_noop(rpc::target_type, const torrent::Object&) {
-  return (int64_t)0;
+apply_xmlrpc_dialect(const std::string& arg) {
+  int value;
+
+  if (arg == "i8")
+    value = rpc::XmlRpc::dialect_i8;
+  else if (arg == "apache")
+    value = rpc::XmlRpc::dialect_apache;
+  else if (arg == "generic")
+    value = rpc::XmlRpc::dialect_generic;
+  else
+    value = -1;
+
+  rpc::xmlrpc.set_dialect(value);
+  return torrent::Object();
 }
 
 void
@@ -275,10 +298,9 @@ initialize_command_network() {
   CMD2_ANY_STRING  ("network.scgi.open_local",       std::bind(&apply_scgi, std::placeholders::_2, 2));
   CMD2_VAR_BOOL    ("network.scgi.dont_route",       false);
 
-  // Deprecated with the removal of xmlrpc-c
-  CMD2_ANY ("network.xmlrpc.dialect.set",            [](const auto&, const auto&) { return 0; });
-  CMD2_ANY ("network.xmlrpc.size_limit",             [](const auto&, const auto&) { return std::numeric_limits<size_t>::max(); });
-  CMD2_ANY ("network.xmlrpc.size_limit.set",         [](const auto&, const auto&) { return 0; });
+  CMD2_ANY_STRING  ("network.xmlrpc.dialect.set",    std::bind(&apply_xmlrpc_dialect, std::placeholders::_2));
+  CMD2_ANY         ("network.xmlrpc.size_limit",     std::bind(&rpc::XmlRpc::size_limit));
+  CMD2_ANY_VALUE_V ("network.xmlrpc.size_limit.set", std::bind(&rpc::XmlRpc::set_size_limit, std::placeholders::_2));
 
   CMD2_ANY         ("network.block.ipv4",            std::bind(&torrent::ConnectionManager::is_block_ipv4, cm));
   CMD2_ANY_VALUE_V ("network.block.ipv4.set",        std::bind(&torrent::ConnectionManager::set_block_ipv4, cm, std::placeholders::_2));

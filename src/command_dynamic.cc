@@ -137,6 +137,7 @@ system_method_generate_command2(torrent::Object* object, torrent::Object::list_c
   
 // }
 
+// This is only used by tinyxml2, xmlrpc-c intercepts the call internally
 torrent::Object
 system_listMethods() {
   torrent::Object resultRaw = torrent::Object::create_list();
@@ -439,7 +440,7 @@ cmd_catch(rpc::target_type target, const torrent::Object& args) {
 
 void
 initialize_command_dynamic() {
-  CMD2_ANY         ("system.listMethods", std::bind(&system_listMethods));
+  CMD2_ANY         ("system.listMethods", std::bind(&system_listMethods)); // only used by tinyxml2
 
   CMD2_VAR_BOOL    ("method.use_deprecated", true);
   CMD2_VAR_VALUE   ("method.use_intermediate", 1);
