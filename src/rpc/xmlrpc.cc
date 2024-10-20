@@ -255,7 +255,7 @@ torrent::Object execute_command(std::string methodName, const tinyxml2::XMLEleme
   }
   CommandMap::iterator cmdItr = commands.find(methodName.c_str());
   if (cmdItr == commands.end() || !(cmdItr->second.m_flags & CommandMap::flag_public_xmlrpc)) {
-    throw xmlrpc_error(XmlRpc::XMLRPC_NO_SUCH_METHOD_ERROR, "method not found: " + std::string(methodName));
+    throw xmlrpc_error(XmlRpc::XMLRPC_NO_SUCH_METHOD_ERROR, "Method '" + std::string(methodName) + "' not defined");
   }
   torrent::Object paramsRaw = torrent::Object::create_list();
   torrent::Object::list_type& params = paramsRaw.as_list();

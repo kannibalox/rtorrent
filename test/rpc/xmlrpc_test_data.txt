@@ -1,0 +1,12 @@
+# Input - basic
+<?xml version="1.0"?><methodCall><methodName>test_a</methodName><params><param><value><string></string></value></param><param><value><i4>41</i4></value></param></params></methodCall>
+<?xml version="1.0"?><methodReponse><params><param><value><array><value><i8>41</i8></value></array></value></param></params></methodReponse>
+# Input - i8
+<methodCall><methodName>test_a</methodName><params><param><value><string></string></value></param><param><value><i8>2247483647</i8></value></param></params></methodCall>
+<?xml version="1.0"?><methodReponse><params><param><value><array><value><i8>2247483647</i8></value></array></value></param></params></methodReponse>
+# Input - missing method
+<methodCall><methodName>test_a</methodName><params><param><value><i4>41</i4></value></param></params></methodCall>
+<?xml version="1.0"?><methodReponse><fault><struct><member><name>faultCode</name><value><int>-500</int></value></member><member><name>faultString</name><value><string>invalid parameters: target must be a string</string></value></member></struct></fault></methodReponse>
+# Input - bad target
+<methodCall><methodName>test_a</methodName><params><param><value><i4>41</i4></value></param></params></methodCall>
+<?xml version="1.0"?><methodReponse><fault><struct><member><name>faultCode</name><value><int>-500</int></value></member><member><name>faultString</name><value><string>invalid parameters: target must be a string</string></value></member></struct></fault></methodReponse>
