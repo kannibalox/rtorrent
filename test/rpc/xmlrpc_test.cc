@@ -1,5 +1,6 @@
 #include "config.h"
 #include <string>
+#include <iostream>
 
 #include "command_helpers.h"
 #include "rpc/command_map.h"
@@ -21,15 +22,17 @@ void
 XmlrpcTest::setUp() {
   m_commandItr = m_commands;
   m_xmlrpc = rpc::XmlRpc();
-    setlocale(LC_ALL, "");
-    cachedTime = rak::timer::current();
-    control = new Control;
-    //initialize_command_dynamic();
-    CMD2_ANY("xmlrpc_reflect", &xmlprpc_cmd_test_map_a);
-    CMD2_ANY("test_b", std::bind(&xmlprpc_cmd_test_map_b, std::placeholders::_1, std::placeholders::_2, (uint64_t)2));
-    CMD2_ANY_STRING("any_string", &xmlprpc_cmd_test_any_string);
+  m_xmlrpc.initialize();
+  setlocale(LC_ALL, "");
+  cachedTime = rak::timer::current();
+  control = new Control;
+  //initialize_command_dynamic();
+  CMD2_ANY("xmlrpc_reflect", &xmlprpc_cmd_test_map_a);
+  CMD2_ANY("test_b", std::bind(&xmlprpc_cmd_test_map_b, std::placeholders::_1, std::placeholders::_2, (uint64_t)2));
+  CMD2_ANY_STRING("any_string", &xmlprpc_cmd_test_any_string);
 }
 
+#ifndef HAVE_XMLRPC_C
 void
 XmlrpcTest::test_basics() {
   std::ifstream file; file.open("rpc/xmlrpc_test_data.txt");
@@ -58,9 +61,13 @@ XmlrpcTest::test_basics() {
 
   // Sanity check the above parser
   CPPUNIT_ASSERT_MESSAGE("Could not parse test data", inputs.size() > 0 && inputs.size() == outputs.size() && inputs.size() == titles.size());
-  for (int i = 0; i < inputs.size(); i++) {    
+  for (int i = 0; i < inputs.size(); i++) {
+    std::cout << titles[i] << "\n";
     auto output = std::string("");
     m_xmlrpc.process(inputs[i].c_str(), inputs[i].size(), [&output](const char* c, uint32_t l){ output.append(c, l); return true;});
     CPPUNIT_ASSERT_EQUAL_MESSAGE(titles[i], std::string(outputs[i]), output);
   }
 }
+#else
+void XmlrpcTest::test_basics() {}
+#endif

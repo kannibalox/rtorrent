@@ -41,7 +41,6 @@
 
 #include <torrent/hash_string.h>
 
-
 namespace core {
   class Download;
 }
@@ -75,6 +74,7 @@ public:
   static const int call_file       = 5;
   static const int call_file_itr   = 6;
 
+  #ifndef HAVE_XMLRPC_C
   // Taken from xmlrpc-c for use with tinyxml2
   static const int XMLRPC_INTERNAL_ERROR = -500;
   static const int XMLRPC_TYPE_ERROR = -501;
@@ -87,6 +87,7 @@ public:
   static const int XMLRPC_INTROSPECTION_DISABLED_ERROR = -508;
   static const int XMLRPC_LIMIT_EXCEEDED_ERROR = -509;
   static const int XMLRPC_INVALID_UTF8_ERROR = -510;
+  #endif
 
   XmlRpc() : m_env(NULL), m_registry(NULL), m_dialect(dialect_i8) {}
 

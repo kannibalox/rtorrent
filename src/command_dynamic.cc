@@ -440,7 +440,9 @@ cmd_catch(rpc::target_type target, const torrent::Object& args) {
 
 void
 initialize_command_dynamic() {
+  #ifndef HAVE_XMLRPC_C
   CMD2_ANY         ("system.listMethods", std::bind(&system_listMethods)); // only used by tinyxml2
+  #endif
 
   CMD2_VAR_BOOL    ("method.use_deprecated", true);
   CMD2_VAR_VALUE   ("method.use_intermediate", 1);

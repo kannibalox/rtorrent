@@ -614,7 +614,7 @@ XmlRpc::set_size_limit(uint64_t size) {
 }
 
 bool
-is_valid() const { return m_env != NULL; }
+XmlRpc::is_valid() const { return m_env != NULL; }
 
 #else
 
