@@ -99,7 +99,7 @@ torrent::Object xml_value_to_object(const tinyxml2::XMLNode* elem) {
     return torrent::Object(elemChild->ToText()->Value());
   } else if (elemType == "i4" or elemType == "i8" or elemType == "int") {
     auto elemValue = std::string(valueElem->FirstChild()->ToText()->Value());
-    return torrent::Object(std::stoi(elemValue));
+    return torrent::Object(std::stol(elemValue));
   } else if (elemType == "boolean") {
     auto boolText = std::string(valueElem->FirstChild()->ToText()->Value());
     if (boolText == "1") {
