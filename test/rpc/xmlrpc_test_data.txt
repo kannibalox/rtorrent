@@ -1,12 +1,31 @@
-# Input - basic
-<?xml version="1.0"?><methodCall><methodName>test_a</methodName><params><param><value><string></string></value></param><param><value><i4>41</i4></value></param></params></methodCall>
+# basic
+<?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><string></string></value></param><param><value><i4>41</i4></value></param></params></methodCall>
 <?xml version="1.0"?><methodReponse><params><param><value><array><value><i8>41</i8></value></array></value></param></params></methodReponse>
-# Input - i8
-<methodCall><methodName>test_a</methodName><params><param><value><string></string></value></param><param><value><i8>2247483647</i8></value></param></params></methodCall>
+
+# i8 values
+<?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><string></string></value></param><param><value><i8>2247483647</i8></value></param></params></methodCall>
 <?xml version="1.0"?><methodReponse><params><param><value><array><value><i8>2247483647</i8></value></array></value></param></params></methodReponse>
-# Input - missing method
-<methodCall><methodName>test_a</methodName><params><param><value><i4>41</i4></value></param></params></methodCall>
+
+# Empty array
+<?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><string></string></value></param><param><value><array><data><value><i8>2247483647</i8></value></data></array></value></param></params></methodCall>
+<?xml version="1.0"?><methodReponse><params><param><value><array><value><array><value><i8>2247483647</i8></value></array></value></array></value></param></params></methodReponse>
+
+# Simple array
+<?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><string></string></value></param><param><value><array><data></data></array></value></param></params></methodCall>
+<?xml version="1.0"?><methodReponse><params><param><value><array><value><array/></value></array></value></param></params></methodReponse>
+
+# Simple struct
+<?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><string></string></value></param><param><value><struct><member><name>lowerBound</name><value><i4>18</i4></value></member><member><name>upperBound</name><value><i4>139</i4></value></member></struct></value></param></params></methodCall>
+<?xml version="1.0"?><methodReponse><params><param><value><array><value><struct><member><name>lowerBound</name><value><i8>18</i8></value></member><member><name>upperBound</name><value><i8>139</i8></value></member></struct></value></array></value></param></params></methodReponse>
+
+# Invalid - missing method
+<?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><i4>41</i4></value></param></params></methodCall>
 <?xml version="1.0"?><methodReponse><fault><struct><member><name>faultCode</name><value><int>-500</int></value></member><member><name>faultString</name><value><string>invalid parameters: target must be a string</string></value></member></struct></fault></methodReponse>
-# Input - bad target
-<methodCall><methodName>test_a</methodName><params><param><value><i4>41</i4></value></param></params></methodCall>
-<?xml version="1.0"?><methodReponse><fault><struct><member><name>faultCode</name><value><int>-500</int></value></member><member><name>faultString</name><value><string>invalid parameters: target must be a string</string></value></member></struct></fault></methodReponse>
+
+# Invalid - bad target
+<?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><i4>41</i4></value></param></params></methodCall>
+ <?xml version="1.0"?><methodReponse><fault><struct><member><name>faultCode</name><value><int>-500</int></value></member><member><name>faultString</name><value><string>invalid parameters: target must be a string</string></value></member></struct></fault></methodReponse>
+
+# Invalid - broken XML
+thodCall><methodName>test_a</methodName><params><param><value><i4>41</i4></value></param></params></method
+<?xml version="1.0"?><methodReponse><fault><struct><member><name>faultCode</name><value><int>-503</int></value></member><member><name>faultString</name><value><string>Error=XML_ERROR_PARSING_ELEMENT ErrorID=6 (0x6) Line number=1: XMLElement name=method</string></value></member></struct></fault></methodReponse>
