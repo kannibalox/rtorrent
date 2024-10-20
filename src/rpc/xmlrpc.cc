@@ -36,6 +36,10 @@
 
 #include "config.h"
 
+#include <cctype>
+#include <string>
+#include <sstream>
+
 #ifdef HAVE_XMLRPC_C
 #include <stdlib.h>
 #include <xmlrpc-c/server.h>
@@ -44,20 +48,12 @@
 #include "utils/base64.h"
 #endif
 
-
-#include <cctype>
 #include <rak/string_manip.h>
 #include <torrent/object.h>
 #include <torrent/exceptions.h>
 
 #include "xmlrpc.h"
 #include "parse_commands.h"
-
-#include "config.h"
-
-#include <string>
-#include <sstream>
-
 
 namespace rpc {
 
@@ -618,9 +614,7 @@ XmlRpc::set_size_limit(uint64_t size) {
 }
 
 bool
-is_valid() const {
-  return m_env != NULL;
-}    
+is_valid() const { return m_env != NULL; }
 
 #else
 
@@ -851,7 +845,7 @@ torrent::Object execute_command(std::string methodName, const tinyxml2::XMLEleme
   }
   return rpc::commands.call_command(cmdItr, paramsRaw, target);
 }
-  
+
 void process_document(const tinyxml2::XMLDocument* doc, tinyxml2::XMLPrinter* printer) {
   if (doc->Error()) {
     throw xmlrpc_error(XmlRpc::XMLRPC_PARSE_ERROR, doc->ErrorStr());
@@ -886,7 +880,7 @@ void process_document(const tinyxml2::XMLDocument* doc, tinyxml2::XMLPrinter* pr
         fault.as_map()["faultString"] = e.what();
         fault.as_map()["faultCode"] = XmlRpc::XMLRPC_INTERNAL_ERROR;
         resultList.push_back(fault);
-      }      
+      }
     }
   } else {
     result = execute_command(methodName, doc->FirstChildElement("methodCall")->FirstChildElement("params"));
@@ -959,16 +953,16 @@ XmlRpc::process(const char* inBuffer, uint32_t length, slot_write slotWrite) {
   return slotWrite(printer.CStr(), printer.CStrSize()-1);
 }
 
-void XmlRpc::initialize() { m_isValid = true;};
+void XmlRpc::initialize() { m_isValid = true; }
 void XmlRpc::cleanup() {}
 
 void XmlRpc::insert_command(__UNUSED const char* name, __UNUSED const char* parm, __UNUSED const char* doc) {}
 void XmlRpc::set_dialect(__UNUSED int dialect) {}
 
 int64_t XmlRpc::size_limit() { return 0; }
-void    XmlRpc::set_size_limit(uint64_t size) {};
-  
-bool XmlRpc::is_valid() const { return m_isValid;}
+void    XmlRpc::set_size_limit(uint64_t size) {}
+
+bool    XmlRpc::is_valid() const { return m_isValid; }
 
 #endif
 

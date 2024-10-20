@@ -87,7 +87,7 @@ public:
   static const int XMLRPC_INTROSPECTION_DISABLED_ERROR = -508;
   static const int XMLRPC_LIMIT_EXCEEDED_ERROR = -509;
   static const int XMLRPC_INVALID_UTF8_ERROR = -510;
-  
+
   XmlRpc() : m_env(NULL), m_registry(NULL), m_dialect(dialect_i8) {}
 
   bool                is_valid() const;
