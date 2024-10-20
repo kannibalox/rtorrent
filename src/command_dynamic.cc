@@ -138,6 +138,17 @@ system_method_generate_command2(torrent::Object* object, torrent::Object::list_c
 // }
 
 torrent::Object
+system_listMethods() {
+  torrent::Object resultRaw = torrent::Object::create_list();
+  torrent::Object::list_type& result = resultRaw.as_list();
+  result.push_back("system.multicall"); // Handled directly by the XMLRPC code
+  for (auto itr : rpc::commands) {
+    result.push_back(itr.first);
+  }
+  return resultRaw;
+}
+
+torrent::Object
 system_method_insert_object(const torrent::Object::list_type& args, int flags) {
   if (args.empty())
     throw torrent::input_error("Invalid argument count.");
@@ -428,6 +439,8 @@ cmd_catch(rpc::target_type target, const torrent::Object& args) {
 
 void
 initialize_command_dynamic() {
+  CMD2_ANY         ("system.listMethods", std::bind(&system_listMethods));
+
   CMD2_VAR_BOOL    ("method.use_deprecated", true);
   CMD2_VAR_VALUE   ("method.use_intermediate", 1);
 

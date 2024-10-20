@@ -188,6 +188,10 @@ libsub_root_a_SOURCES = \
 	thread_base.cc \
 	thread_base.h \
 	thread_worker.cc \
-	thread_worker.h
+	thread_worker.h \
+	\
+	vendor/tinyxml2/tinyxml2.h \
+	vendor/tinyxml2/tinyxml2.cpp
+
 
 AM_CPPFLAGS = -I$(srcdir) -I$(top_srcdir)

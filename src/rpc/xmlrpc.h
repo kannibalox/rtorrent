@@ -37,6 +37,7 @@
 #ifndef RTORRENT_RPC_XMLRPC_H
 #define RTORRENT_RPC_XMLRPC_H
 
+#include "tinyxml2.h"
 #include <functional>
 
 #include <torrent/hash_string.h>
@@ -61,10 +62,6 @@ public:
   typedef std::function<torrent::Peer* (core::Download*, const torrent::HashString&)> slot_peer;
   typedef std::function<bool (const char*, uint32_t)>                  slot_write;
 
-  static const int dialect_generic = 0;
-  static const int dialect_i8      = 1;
-  static const int dialect_apache  = 2;
-
   // These need to match CommandMap type values.
   static const int call_generic    = 0;
   static const int call_any        = 1;
@@ -74,33 +71,32 @@ public:
   static const int call_file       = 5;
   static const int call_file_itr   = 6;
 
-  XmlRpc() : m_env(NULL), m_registry(NULL), m_dialect(dialect_i8) {}
+  // Taken from xmlrpc-c for compatibiliy
+  static const int XMLRPC_INTERNAL_ERROR = -500;
+  static const int XMLRPC_TYPE_ERROR = -501;
+  static const int XMLRPC_INDEX_ERROR = -502;
+  static const int XMLRPC_PARSE_ERROR = -503;
+  static const int XMLRPC_NETWORK_ERROR = -504;
+  static const int XMLRPC_TIMEOUT_ERROR = -505;
+  static const int XMLRPC_NO_SUCH_METHOD_ERROR = -506;
+  static const int XMLRPC_REQUEST_REFUSED_ERROR = -507;
+  static const int XMLRPC_INTROSPECTION_DISABLED_ERROR = -508;
+  static const int XMLRPC_LIMIT_EXCEEDED_ERROR = -509;
+  static const int XMLRPC_INVALID_UTF8_ERROR = -510;
 
-  bool                is_valid() const { return m_env != NULL; }
-
-  void                initialize();
-  void                cleanup();
+  XmlRpc() {}
 
   bool                process(const char* inBuffer, uint32_t length, slot_write slotWrite);
-
-  void                insert_command(const char* name, const char* parm, const char* doc);
-
-  int                 dialect() { return m_dialect; }
-  void                set_dialect(int dialect);
 
   slot_download&      slot_find_download() { return m_slotFindDownload; }
   slot_file&          slot_find_file()     { return m_slotFindFile; }
   slot_tracker&       slot_find_tracker()  { return m_slotFindTracker; }
   slot_peer&          slot_find_peer()     { return m_slotFindPeer; }
 
-  static int64_t      size_limit();
-  static void         set_size_limit(uint64_t size);
 
 private:
-  void*               m_env;
-  void*               m_registry;
 
-  int                 m_dialect;
+  void process_document(const tinyxml2::XMLDocument* doc, tinyxml2::XMLPrinter* printer);
 
   slot_download       m_slotFindDownload;
   slot_file           m_slotFindFile;

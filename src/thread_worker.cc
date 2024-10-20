@@ -48,7 +48,6 @@
 
 #include "core/manager.h"
 #include "rpc/scgi.h"
-#include "rpc/xmlrpc.h"
 #include "rpc/parse_commands.h"
 
 ThreadWorker::ThreadWorker() {
@@ -71,9 +70,6 @@ ThreadWorker::set_scgi(rpc::SCgi* scgi) {
     return false;
 
   change_xmlrpc_log();
-
-  // The xmlrpc process call requires a global lock.
-//   m_safe.scgi->set_slot_process(rak::mem_fn(&rpc::xmlrpc, &rpc::XmlRpc::process));
 
   // Synchronize in order to ensure the worker thread sees the updated
   // SCgi object.
