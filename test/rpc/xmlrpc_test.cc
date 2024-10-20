@@ -56,6 +56,8 @@ XmlrpcTest::test_basics() {
     index++;
   }
 
+  // Sanity check the above parser
+  CPPUNIT_ASSERT_MESSAGE("Could not parse test data", inputs.size() > 0 && inputs.size() == outputs.size() && inputs.size() == titles.size());
   for (int i = 0; i < inputs.size(); i++) {    
     auto output = std::string("");
     m_xmlrpc.process(inputs[i].c_str(), inputs[i].size(), [&output](const char* c, uint32_t l){ output.append(c, l); return true;});
