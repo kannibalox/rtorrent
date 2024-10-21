@@ -10,6 +10,10 @@
 <?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><string></string></value></param><param><value><string>😊</string></value></param></params></methodCall>
 <?xml version="1.0"?><methodReponse><params><param><value><array><value><string>😊</string></value></array></value></param></params></methodReponse>
 
+# base64 data (which gets returned as a string)
+<?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><string></string></value></param><param><value><base64>Zm9vYmFy</base64></value></param></params></methodCall>
+<?xml version="1.0"?><methodReponse><params><param><value><array><value><string>foobar</string></value></array></value></param></params></methodReponse>
+
 # i4 ints
 <?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><string></string></value></param><param><value><i4>41</i4></value></param></params></methodCall>
 <?xml version="1.0"?><methodReponse><params><param><value><array><value><i4>41</i4></value></array></value></param></params></methodReponse>
