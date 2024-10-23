@@ -18,6 +18,7 @@ torrent::Object xmlprpc_cmd_test_any_string(__UNUSED rpc::target_type target, co
 
 void initialize_command_dynamic();
 
+#ifdef HAVE_XMLRPC_TINYXML2
 void
 XmlrpcTest::setUp() {
   m_commandItr = m_commands;
@@ -32,7 +33,6 @@ XmlrpcTest::setUp() {
   CMD2_ANY_STRING("any_string", &xmlprpc_cmd_test_any_string);
 }
 
-#ifndef HAVE_XMLRPC_C
 void
 XmlrpcTest::test_basics() {
   std::ifstream file; file.open("rpc/xmlrpc_test_data.txt");
@@ -70,4 +70,5 @@ XmlrpcTest::test_basics() {
 }
 #else
 void XmlrpcTest::test_basics() {}
+void XmlrpcTest::setUp() {}
 #endif

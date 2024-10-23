@@ -1,3 +1,6 @@
+// rtorrent-specific check
+#include "config.h"
+#ifdef HAVE_XMLRPC_TINYXML2
 /*
 Original code by Lee Thomason (www.grinninglizard.com)
 
@@ -3025,3 +3028,4 @@ bool XMLPrinter::Visit( const XMLUnknown& unknown )
 }
 
 }   // namespace tinyxml2
+#endif

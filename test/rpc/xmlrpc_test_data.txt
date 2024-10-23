@@ -46,7 +46,7 @@
 <?xml version="1.0"?><methodCall><methodName>no_such_method</methodName><params><param><value><i4>41</i4></value></param></params></methodCall>
 <?xml version="1.0"?><methodReponse><fault><struct><member><name>faultCode</name><value><int>-506</int></value></member><member><name>faultString</name><value><string>Method 'no_such_method' not defined</string></value></member></struct></fault></methodReponse>
 
-# Invalid - bad target
+# Invalid - i4 target
 <?xml version="1.0"?><methodCall><methodName>xmlrpc_reflect</methodName><params><param><value><i4>41</i4></value></param></params></methodCall>
 <?xml version="1.0"?><methodReponse><fault><struct><member><name>faultCode</name><value><int>-500</int></value></member><member><name>faultString</name><value><string>invalid parameters: target must be a string</string></value></member></struct></fault></methodReponse>
 

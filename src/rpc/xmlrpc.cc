@@ -40,7 +40,7 @@
 #include <string>
 #include <sstream>
 
-#ifdef HAVE_XMLRPC_C
+#if defined(HAVE_XMLRPC_C)
 #include <stdlib.h>
 #include <xmlrpc-c/server.h>
 #else
@@ -57,7 +57,7 @@
 
 namespace rpc {
 
-#ifdef HAVE_XMLRPC_C
+#if defined(HAVE_XMLRPC_C)
 
 class xmlrpc_error : public torrent::base_error {
 public:
@@ -616,7 +616,7 @@ XmlRpc::set_size_limit(uint64_t size) {
 bool
 XmlRpc::is_valid() const { return m_env != NULL; }
 
-#else
+#elif defined(HAVE_XMLRPC_TINYXML2)
 
 class xmlrpc_error : public torrent::base_error {
 public:
@@ -964,6 +964,20 @@ void    XmlRpc::set_size_limit(uint64_t size) {}
 
 bool    XmlRpc::is_valid() const { return m_isValid; }
 
+#else
+
+void XmlRpc::initialize() { throw torrent::resource_error("XMLRPC not supported."); }
+void XmlRpc::cleanup() {}
+
+void XmlRpc::insert_command(__UNUSED const char* name, __UNUSED const char* parm, __UNUSED const char* doc) {}
+void XmlRpc::set_dialect(__UNUSED int dialect) {}
+
+bool XmlRpc::process(__UNUSED const char* inBuffer, __UNUSED uint32_t length, __UNUSED slot_write slotWrite) { return false; }
+
+int64_t XmlRpc::size_limit() { return 0; }
+void    XmlRpc::set_size_limit(uint64_t size) {}
+
+bool    XmlRpc::is_valid() const { return false; }
 #endif
 
 }
